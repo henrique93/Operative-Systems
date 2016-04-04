@@ -30,3 +30,23 @@
 
 # Debug files
 *.dSYM/
+
+#temporary files
+*~
+
+*.class
+*.jar
+.classpath
+.settings
+.project
+.*.swp
+
+OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
