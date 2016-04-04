@@ -12,10 +12,10 @@
 
 list_t* lst_new()
 {
-   list_t *list;
-   list = (list_t*) malloc(sizeof(list_t));
-   list->first = NULL;
-   return list;
+    list_t *list;
+    list = (list_t*) malloc(sizeof(list_t));
+    list->first = NULL;
+    return list;
 }
 
 
@@ -47,27 +47,42 @@ void insert_new_process(list_t *list, int pid, time_t starttime)
 }
 
 
-void update_terminated_process(list_t *list, int pid, int status, time_t endtime) {
-  lst_iitem_t *item;
-  item = list->first;
-  while(item->pid != pid){
-		item = item->next;
-	}
-  item->status = status;
-  item->endtime = endtime;
+double update_terminated_process(list_t *list, int pid, int status, time_t endtime) {
+    lst_iitem_t *item;
+    item = list->first;
+    while(item->pid != pid){
+        item = item->next;
+    }
+    item->status = status;
+    item->endtime = endtime;
+    return difftime(item->endtime, item->starttime);
 }
 
 
 void lst_print(list_t *list)
 {
-	lst_iitem_t *item;
-	double timeSpent;
-	printf("Process list with ID, time in seconds and exit status:\nID\tTime(s)\tStatus\n");
-	item = list->first;
-	while (item != NULL) {
-		timeSpent = difftime(item->endtime, item->starttime);
-		printf("%d\t%.0f\t%d\n", item->pid, timeSpent, WEXITSTATUS(item->status));
-		item = item->next;
-	}
-	printf("-- end of list.\n");
+    lst_iitem_t *item;
+    double timeSpent;
+    printf("Process list with ID, time in seconds and exit status:\nID\tTime(s)\tStatus\n");
+    item = list->first;
+    while (item != NULL) {
+        timeSpent = difftime(item->endtime, item->starttime);
+        printf("%d\t%.0f\t%d\n", item->pid, timeSpent, WEXITSTATUS(item->status));
+        item = item->next;
+    }
+    printf("-- end of list.\n");
+}
+
+
+void file_print(FILE *f, list_t *list, int iteration, int childID, double timeTotal)
+{
+    lst_iitem_t *item;
+    double timeSpent;
+    item = list->first;
+    while (item->pid != childID) {
+        item = item->next;
+    }
+    timeSpent = difftime(item->endtime, item->starttime);
+    fprintf(f, "Iteration: %d\npid: %d execution time %.0f s\ntotal execution time: %.0f s\n", iteration, item->pid, timeSpent, timeTotal);
+    fflush(f);
 }
