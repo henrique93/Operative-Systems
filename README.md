@@ -4,6 +4,4 @@
 
 Pedro Reynolds
 
-Maria Serralha
-
 # Project IST 2015/2016
